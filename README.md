@@ -6,14 +6,23 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of logos is to …
+The goal of `logos` is to give access to the Greek New Testament (27
+books) and the Tanach (39 books) and allow users to do textual analysis
+on the textual data. The New and Old Testament have been provided in
+their original languages, Greek and Hebrew, respectively.
 
 ## Installation
 
 You can install the development version of logos like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+devtools::install_github("jpmonteagudo28/logos")
+```
+
+or download the package from CRAN like so:
+
+``` r
+install.packages("logos")
 ```
 
 ## Example
@@ -24,25 +33,3 @@ This is a basic example which shows you how to solve a common problem:
 # library(logos)
 ## basic example code
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
