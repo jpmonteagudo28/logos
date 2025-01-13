@@ -10,8 +10,9 @@ The goal of `logos` is to give access to the Greek New Testament (27
 books) and the Tanach (39 books) and allow users to do textual analysis
 on the data. The New and Old Testament have been provided in their
 original languages, Greek and Hebrew, respectively. Additionally, the
-*English Standard Version* (ESV) is also provided for users who’d rather
-use a word–for–word modern English translation.
+~~English Standard Version (ESV)~~ *American Standard Version* (ASV) is
+also provided for users who’d rather use a word–for–word modern English
+translation.
 
 ## Installation
 
