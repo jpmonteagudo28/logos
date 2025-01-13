@@ -22,7 +22,7 @@ The goal of `logos` is to give access to the Greek New Testament (27 books) and 
 
 ## Installation
 
-You can install the development version of logos like so:
+You can install the development version of `logos` like so:
 
 ``` r
 devtools::install_github("jpmonteagudo28/logos")
