@@ -1,6 +1,6 @@
 library(dplyr)
 library(tidyr)
-library(arrow)
+library(stringr)
 
 # New Testament files
 files <- files <- list.files("raw_data/sblgnt/text", full.names = TRUE)
@@ -223,3 +223,200 @@ bible_data <- data.frame(
 
 saveRDS(bible_data,file = "data/author_data")
 #---- --- ---- --- ---- --- ---- --- ---- --- ----#
+# Leningrad Codex obtained from Tanach Inc.
+# https://www.tanach.us/Pages/Technical.html#zipfiles
+
+book_abbreviations <- c(
+  "Genesis" = "Gen",
+  "Exodus" = "Exod",
+  "Leviticus" = "Lev",
+  "Numbers" = "Num",
+  "Deuteronomy" = "Deut",
+  "Joshua" = "Josh",
+  "Judges" = "Judg",
+  "Samuel_1" = "1Sam",
+  "Samuel_2" = "2Sam",
+  "Kings_1" = "1Kgs",
+  "Kings_2" = "2Kgs",
+  "Isaiah" = "Isa",
+  "Jeremiah" = "Jer",
+  "Ezekiel" = "Ezek",
+  "Hosea" = "Hos",
+  "Joel" = "Joel",
+  "Amos" = "Amos",
+  "Obadiah" = "Obad",
+  "Jonah" = "Jonah",
+  "Micah" = "Mic",
+  "Nahum" = "Nah",
+  "Habakkuk" = "Hab",
+  "Zephaniah" = "Zeph",
+  "Haggai" = "Hag",
+  "Zechariah" = "Zech",
+  "Malachi" = "Mal",
+  "Psalms" = "Ps",
+  "Proverbs" = "Prov",
+  "Job" = "Job",
+  "Song_of_Songs" = "Song",
+  "Ruth" = "Ruth",
+  "Lamentations" = "Lam",
+  "Ecclesiastes" = "Eccl",
+  "Esther" = "Esth",
+  "Daniel" = "Dan",
+  "Ezra" = "Ezra",
+  "Nehemiah" = "Neh",
+  "Chronicles_1" = "1Chron",
+  "Chronicles_2" = "2Chron"
+)
+
+hebrew_to_english <- c(
+  "בְּרֵאשִׁית" = "Genesis",
+  "שְׁמֹות" = "Exodus",
+  "וַיִּקְרָא" = "Leviticus",
+  "בְּמִדְבַּר" = "Numbers",
+  "דְּבָרִים" = "Deuteronomy",
+  "יְהוֹשֻעַ" = "Joshua",
+  "שֹׁפְטִים" = "Judges",
+  "שְׁמוּאֵל" = "Samuel",
+  "מְלָכִים" = "Kings",
+  "יְשַׁעְיָהוּ" = "Isaiah",
+  "יִרְמְיָהוּ" = "Jeremiah",
+  "יְחֶזְקֵאל" = "Ezekiel",
+  "הוֹשֵׁעַ" = "Hosea",
+  "יוֹאֵל" = "Joel",
+  "עָמוֹס" = "Amos",
+  "עֹבַדְיָה" = "Obadiah",
+  "יוֹנָה" = "Jonah",
+  "מִיכָה" = "Micah",
+  "נַחוּם" = "Nahum",
+  "חֲבַקּוּק" = "Habakkuk",
+  "צְפַנְיָה" = "Zephaniah",
+  "חַגַּי" = "Haggai",
+  "זְכַרְיָה" = "Zechariah",
+  "מַלְאָכִי" = "Malachi",
+  "תְהִלִּים" = "Psalms",
+  "מִשְׁלֵי" = "Proverbs",
+  "אִיּוֹב" = "Job",
+  "שִׁיר הַשִּׁירִים" = "Song of Songs",
+  "רוּת" = "Ruth",
+  "אֵיכָה" = "Lamentations",
+  "קֹהֶלֶת" = "Ecclesiastes",
+  "אֶסְתֵר" = "Esther",
+  "דָּנִיֵּאל" = "Daniel",
+  "עֶזְרָא" = "Ezra",
+  "דִּבְרֵי הַיָּמִים" = "Chronicles"
+)
+
+# Removing comments from each text file
+
+# Define the directory containing the files
+directory_path <- "raw_data/leningrad_codex/text"
+
+# Get a list of all text files in the directory
+file_list <- list.files(directory_path,
+                        pattern = "\\.txt$",
+                        full.names = TRUE)
+
+# Function to handle bidi characters in regex
+bidi_safe_grepl <- function(pattern, text) {
+  grepl(pattern, text, perl = TRUE) # Enable Perl-compatible regex for advanced patterns
+}
+
+# Update your loop:
+for (file_path in file_list) {
+  # Read the file
+  lines <- readLines(file_path, encoding = "UTF-8")
+
+  # Filter out lines starting with `xxxx` (ignoring bidi formatting)
+  cleaned_lines <- lines[!bidi_safe_grepl("^xxxx", lines)]
+
+  # Write the cleaned content back to the file
+  writeLines(cleaned_lines, file_path, useBytes = TRUE)
+
+  cat("Processed file:", file_path, "\n")
+}
+
+format_book_name <- function(filename) {
+  # Remove file extension
+  basename <- tools::file_path_sans_ext(filename)
+
+  # Look up the full name in our abbreviations
+  abbrev <- book_abbreviations[basename]
+
+  # Return the abbreviation or original name if not found
+  if (!is.na(abbrev)) {
+    return(abbrev)
+  } else {
+    warning(sprintf("No abbreviation found for book: %s", basename))
+    return(basename)
+  }
+}
+
+
+process_hebrew_text <- function(text_lines) {
+  # Split the text into lines and create a dataframe
+  df <- data.frame(
+    raw_text = text_lines,
+    stringsAsFactors = FALSE
+  ) |>
+    # Extract verse numbers and chapter numbers
+    mutate(
+      # Extract the numbers before ׃
+      verse_chapter = str_extract(raw_text, "^\\s*\\d+\\s*׃\\s*\\d+"),
+      # Clean up the actual text
+      text = str_replace(raw_text, "^\\s*\\d+\\s*׃\\s*\\d+\\s*", "")
+    ) |>
+    # Separate verse and chapter
+    separate(
+      verse_chapter,
+      into = c("verse", "chapter"),
+      sep = "׃",
+      fill = "right"
+    ) |>
+    # Clean up numbers
+    mutate(
+      verse = as.numeric(str_trim(verse)),
+      chapter = as.numeric(str_trim(chapter)),
+      # Remove any remaining whitespace from text
+      text = str_trim(text)
+    )
+
+  return(df)
+}
+
+
+process_leningrad_codex <- function(file_path) {
+  # Read the file
+  text_lines <- readLines(file_path, encoding = "UTF-8")
+
+  # Process the text
+  processed_df <- process_hebrew_text(text_lines)
+
+  # Add book information (you might want to extract this from filename or pass as parameter)
+  processed_df$book <- format_book_name(basename(file_path))
+
+  return(processed_df)
+}
+
+# To process multiple files:
+process_all_files <- function(directory_path) {
+  # Get all files in directory
+  files <- list.files(directory_path, full.names = TRUE, pattern = "\\.txt$")
+
+  # Process each file
+  processed_files <- lapply(files, process_leningrad_codex)
+
+  # Combine all files
+  full_codex <- bind_rows(processed_files)
+
+  # Reorder columns
+  full_codex <- full_codex |>
+    select(book, chapter, verse, text)
+
+  return(full_codex)
+}
+
+old_testament <- process_all_files("raw_data/leningrad_codex/text")
+
+
+saveRDS(old_testament,file = "data/old_testament")
+
