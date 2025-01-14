@@ -16,15 +16,15 @@ for (i in seq_along(files)) {
 
   # Extract the header name
   greek_name <- colnames(file_data)[1]
-  colnames(file_data)[1] <- "Text"
+  colnames(file_data)[1] <- "text"
 
   # Process the data
   processed_files[[i]] <- file_data |>
     as.data.frame() |>
     tibble::rownames_to_column(var = "Reference") |>
     mutate(Reference = trimws(Reference)) |>
-    separate(Reference, into = c("Book", "ChapterVerse"), sep = " ", fill = "right") |>
-    separate(ChapterVerse, into = c("Chapter", "Verse"), sep = ":", fill = "right") |>
+    separate(Reference, into = c("book", "ChapterVerse"), sep = " ", fill = "right") |>
+    separate(ChapterVerse, into = c("chapter", "verse"), sep = ":", fill = "right") |>
     mutate(greek_name = greek_name)
 }
 
@@ -32,7 +32,7 @@ for (i in seq_along(files)) {
 new_testament <- bind_rows(processed_files) |>
   select(1:5)
 
-saveRDS(new_testament,file = "data/new_testament")
+usethis::use_data(new_testament)
 
 
 #---- --- ---- --- ---- --- ---- --- ---- --- ----#
@@ -44,7 +44,7 @@ saveRDS(new_testament,file = "data/new_testament")
 
 # Author data
 # Create Bible data frame with 66 entries (one per book)
-bible_data <- data.frame(
+author_data <- data.frame(
   author = c(
     # Old Testament - 39 books
     "Moses",           #1  Genesis
@@ -221,7 +221,8 @@ bible_data <- data.frame(
   )
 )
 
-saveRDS(bible_data,file = "data/author_data")
+usethis::use_data(author_data)
+
 #---- --- ---- --- ---- --- ---- --- ---- --- ----#
 # Leningrad Codex obtained from Tanach Inc.
 # https://www.tanach.us/Pages/Technical.html#zipfiles
@@ -303,8 +304,16 @@ hebrew_to_english <- c(
   "אֶסְתֵר" = "Esther",
   "דָּנִיֵּאל" = "Daniel",
   "עֶזְרָא" = "Ezra",
+  "נְחֶמְיָה" = "Nehemiah",
   "דִּבְרֵי הַיָּמִים" = "Chronicles"
-)
+) |> as.data.frame() |>
+  tibble::rownames_to_column(var = "hebrew_name") |>
+  rename("english_equivalent" =
+              starts_with("c("))
+
+hebrew_to_english <- lapply(hebrew_to_english,
+                            function(col) sort(col)) |>
+  as.data.frame()
 
 # Removing comments from each text file
 
@@ -417,6 +426,60 @@ process_all_files <- function(directory_path) {
 
 old_testament <- process_all_files("raw_data/leningrad_codex/text")
 
+ot <- old_testament |>
+  mutate(book = str_remove_all(book, "^\\d")) |> # Remove numbers from the book names
+  group_by(book) |>
+  count() |>
+  ungroup() |>
+  arrange(book)
 
-saveRDS(old_testament,file = "data/old_testament")
+count <- ot$n
+hebrew_names <- rep(hebrew_to_english$hebrew_name,times = count)
 
+old_testament <- append_column(old_testament,
+                        hebrew_names,
+                        .after = "text")
+
+
+usethis::use_data(old_testament)
+
+#---- --- ---- --- ---- --- ---- --- ---- --- ---- --- ----#
+# Creating RASV data frame
+
+directory_path <- "raw_data/rasv"
+
+# Get a list of all text files in the directory
+file <- list.files(directory_path,
+                        pattern = "\\.db$",
+                        full.names = TRUE)
+
+file_data <- read.delim(file, header = FALSE)
+
+# Debugging: Check the file data
+print(head(file_data))  # Ensure the file is being read correctly
+
+# Extract the header name
+colnames(file_data)[1] <- "Text"
+
+# Process the data
+processed_file <- file_data |>
+  as.data.frame() |>
+  rename(raw = everything()) |>
+  separate(raw, into = c("book", "chapter", "verse", "text"),
+           sep = "\\|") |>
+  mutate(
+    chapter = as.integer(chapter),
+    verse = as.integer(verse),
+    book = first_to_upper(book)
+  )
+
+verse_counts <- processed_file |>
+  group_by(book) |>
+  count()|>
+  ungroup()
+
+# Total number of verses checks out for OT and NT
+
+rasb_bible <- processed_file
+
+usethis::use_data(rasb_bible)

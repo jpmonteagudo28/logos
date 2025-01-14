@@ -4,7 +4,6 @@ divide_by <- function(book = NULL,
                       author = NULL,
                       section = NULL, # gospel, law, etc.
                       dates = NULL, # date range
-                      period = NULL, #B.c or A.D
                       literature = NULL, # wisdom, law,
                       testament = NULL, # old and new
                       language = NULL){ # heb, greek, eng

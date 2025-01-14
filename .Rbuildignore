@@ -3,3 +3,7 @@
 ^logos\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
+^LICENSE\.md$
+^raw_data$
+^_README\.md$
+^About\.md$
