@@ -474,12 +474,30 @@ processed_file <- file_data |>
   )
 
 verse_counts <- processed_file |>
-  group_by(book) |>
-  count()|>
-  ungroup()
+  dplyr::group_by(book) |>
+  dplyr::count()|>
+  dplyr::ungroup()
+
+bible_books <- c(
+  "1Chr", "1Cor", "1John", "1Kgs", "1Pet", "1Sam", "1Thess", "1Tim",
+  "2Chr", "2Cor", "2John", "2Kgs", "2Pet", "2Sam", "2Thess", "2Tim",
+  "3John", "Acts", "Amos", "Col", "Dan", "Deut", "Ecc", "Eph", "Est",
+  "Exod", "Ezek", "Ezra", "Gal", "Gen", "Hab", "Hag", "Heb", "Hos",
+  "Isa", "Jude", "Jdg", "Jer", "John", "James", "Jon", "Job", "Joel",
+  "Josh", "Lam", "Lev", "Luke", "Mal", "Mic", "Mark", "Matt", "Nah",
+  "Neh", "Num", "Obad", "Phil", "Phlm", "Prov", "Psms", "Rev", "Rom",
+  "Ruth", "Song", "Titus", "Zech", "Zeph"
+)
+
+verses_by_book <- verse_counts |>
+  dplyr::mutate(
+    book = bible_books
+  )
 
 # Total number of verses checks out for OT and NT
 
 rasb_bible <- processed_file
 
 usethis::use_data(rasb_bible)
+
+usethis::use_data(verses_by_book)

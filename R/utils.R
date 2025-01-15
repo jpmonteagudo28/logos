@@ -46,21 +46,16 @@ first_to_lower <- function(.x, split_by = " ") {
   return(result)
 }
 #---- ---- --- --- ---- ---- --- --- ---- ----#
-# dplyr synonyms using base R
-# taken from https://github.com/coolbutuseless/poorman/blob/master/R/utils.R
-extract <- `[`
-extract2 <- `[[`
-inset <- `[<-`
-set_colnames <- `colnames<-`
 
 #---- ---- --- --- ---- ---- --- --- ---- ----#
-deparse_dots <- function(...) {
-  vapply(substitute(...()), deparse, NA_character_)
+is_whole <- function(book,chapter){
+
 }
 
-#---- ---- --- --- ---- ---- --- --- ---- ----#
-is_dataframe <- function(.data) {
-  parent_fn <- all.names(sys.call(-1L), max.names = 1L)
-  if (!is.data.frame(.data)) stop(parent_fn, " must be given a data.frame")
-  invisible()
+is_half <- function(x){
+
+}
+
+is_quarter <- function(x){
+
 }

@@ -10,13 +10,13 @@ The goal of `logos` is to give access to the Greek New Testament (27
 books) and the Tanach (39 books) and allow users to do textual analysis
 on the data. The New and Old Testament have been provided in their
 original languages, Greek and Hebrew, respectively. Additionally, the
-~~English Standard Version (ESV)~~ *Revised American Standard Version*
-(RASV) is also provided for users who’d rather use a word–for–word
+~~English Standard Version (ESV)~~ *Revised American Standard Bible*
+(RASB) is also provided for users who’d rather use a word–for–word
 modern (1901) English translation.
 
 ## Installation
 
-You can install the development version of logos like so:
+You can install the development version of `logos` like so:
 
 ``` r
 devtools::install_github("jpmonteagudo28/logos")
