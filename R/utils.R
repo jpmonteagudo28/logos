@@ -1,3 +1,5 @@
+`%!in%` <- Negate(`%in%`)
+
 replace_char <- function(.input_string,
                          old_char,
                          new_char,

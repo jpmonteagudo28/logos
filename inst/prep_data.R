@@ -25,7 +25,9 @@ for (i in seq_along(files)) {
     mutate(Reference = trimws(Reference)) |>
     separate(Reference, into = c("book", "ChapterVerse"), sep = " ", fill = "right") |>
     separate(ChapterVerse, into = c("chapter", "verse"), sep = ":", fill = "right") |>
-    mutate(greek_name = greek_name)
+    mutate(greek_name = greek_name,
+           chapter = as.numeric(chapter),
+           verse = as.numeric(verse))
 }
 
 # Combine all processed data into a single data frame
