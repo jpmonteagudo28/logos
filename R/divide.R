@@ -1,5 +1,7 @@
 divide_by <- function(book = NULL,
                       chapter = NULL,
+                      fraction = NULL,
+                      part = NULL,
                       verse = NULL,
                       author = NULL,
                       section = NULL, # gospel, law, etc.

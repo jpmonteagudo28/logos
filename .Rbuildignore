@@ -7,3 +7,5 @@
 ^raw_data$
 ^_README\.md$
 ^About\.md$
+^inst$
+^R/folder_size\.R$

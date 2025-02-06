@@ -128,6 +128,7 @@ get_folder_size <- function(folder,
 #' @return A logical value: \code{TRUE} if the name is a file, \code{FALSE} otherwise.
 #'
 #' @keywords internal
+#' @noRd
 #'
 #' @details
 #' This function searches for the specified name in the directory and distinguishes

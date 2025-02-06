@@ -3,3 +3,6 @@
 S3method(peek,data.frame)
 S3method(peek,default)
 export(peek)
+importFrom(dplyr,arrange)
+importFrom(dplyr,filter)
+importFrom(dplyr,slice)

@@ -48,16 +48,17 @@ first_to_lower <- function(.x, split_by = " ") {
   return(result)
 }
 #---- ---- --- --- ---- ---- --- --- ---- ----#
+to_char <- function(symbol) {
 
+  expr <- substitute(symbol)
+
+  if (is.character(expr)) {
+    return(expr)
+  }
+
+  if (is.name(expr)) {
+    return(as.character(expr))
+  }
+  return(deparse(expr))
+}
 #---- ---- --- --- ---- ---- --- --- ---- ----#
-is_whole <- function(book,chapter){
-
-}
-
-is_half <- function(x){
-
-}
-
-is_quarter <- function(x){
-
-}
