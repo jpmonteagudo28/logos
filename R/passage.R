@@ -1,7 +1,7 @@
 select_passage <- function(book = NULL,
                            chapter = NULL,
-                           fraction = NULL,# option for whole book, half, quarter
-                           part = NULL,
+                           fraction = 1,# option for whole book, half, quarter
+                           part = 1,
                            verse = NULL,
                            by = NULL,
                            testament = NULL,
@@ -28,8 +28,10 @@ select_passage <- function(book = NULL,
 
 
   # What to do if chapter and verse are included
-  if(!is.null(chapter)){
-    chapter <- retrieve_chapter()
+  if(!is.null(chapter) && !is.numeric(chapter)){
+    stop("verse must be a numeric vector of length equal or greater than 1")
+  } else {
+    chapter <- chapter
   }
 
   if(!is.null(verse) && !is.numeric(verse)){

@@ -2,8 +2,8 @@ retrieve_chapter <- function(book,
                              chapter,
                              fraction = 1,
                              part = 1,
-                             testament,
-                             language) {
+                             language,
+                             testament) {
 
   language <- match.arg(language,
                         c("English","Hebrew","Greek"),
@@ -14,6 +14,9 @@ retrieve_chapter <- function(book,
                          several.ok = FALSE)
 
   bible_data <- get_bible_version(language,testament)
+
+  # Verse is a numeric column
+  verse <- bible_data$verse
 
   # Validate book name using fuzzy matching
   book <- suggest_closest_book(book, unique(bible_data$book))
@@ -41,5 +44,5 @@ retrieve_chapter <- function(book,
   chapter_data <- chapter_data |>
     dplyr::slice(start_verse:end_verse)
 
-  return(chapter_data)
+  return(chapter_data$text)
 }

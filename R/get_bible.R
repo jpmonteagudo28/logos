@@ -48,12 +48,12 @@ get_bible_version <- function(language,testament){
 }
 
 
-get_section <- function(book,
+get_fraction <- function(book,
                         chapter,
-                        fraction = 1,
-                        part = 1,
-                        language,
-                        testament) {
+                        fraction,
+                        part,
+                        language = NULL,
+                        testament = NULL) {
 
   # Retrieve the full text of the chapter
   full_chapter <- retrieve_chapter(book,
@@ -63,7 +63,6 @@ get_section <- function(book,
                                    language,
                                    testament)
 
-  bible <- get_bible_version(language,testament)
 
   # Determine the total number of verses
   num_verses <- length(full_chapter)
@@ -77,4 +76,24 @@ get_section <- function(book,
 
   # Extract and return the requested section
   return(full_chapter[start_verse:end_verse])
+}
+
+get_section <- function(section,bible){
+
+  stopifnot(is.character(section))
+
+  your_section <- section
+
+  bible_sections <- unique(author_data$section)
+  if(your_section %!in% bible_sections){
+    stop("The section selected does not match any of the sections contained inthe 'author_data' dataset. Please, refer to this dataset for a complete list of sections")
+  }
+
+  books <- author_data |>
+    dplyr::group_by(section) |>
+    dplyr::filter(section == your_section) |>
+    dplyr::ungroup() |>
+    dplyr::select(books)
+
+
 }
