@@ -4,9 +4,7 @@ get_bible_version <- function(language,testament){
                         c("English","Hebrew","Greek"),
                         several.ok = FALSE)
 
-  testament <- match.arg(testament,
-                         c("Old","New","Both"),
-                         several.ok = FALSE)
+  testament <- standardize_testament(testament)
 
   # Define book ranges for the Old and New Testament
   books <- unique(rasb_bible$book)
@@ -21,11 +19,11 @@ get_bible_version <- function(language,testament){
                               stop("The provided dataset must contain a 'book' column.")
                             }
                             switch(testament,
-                                   "Old" = rasb_bible |>
+                                   "Old Testament" = rasb_bible |>
                                      dplyr::filter(
                                        book %in% old_testament_books
                                      ),
-                                   "New" = rasb_bible |>
+                                   "New Testament" = rasb_bible |>
                                      dplyr::filter(
                                        book %in% new_testament_books
                                      ),
@@ -33,13 +31,13 @@ get_bible_version <- function(language,testament){
                             )
                           },
                           "Hebrew" = switch(testament,
-                                            "Old" = old_testament,
-                                            "New" = stop("The Leningrad Codex only includes the Old Testament."),
+                                            "Old Testament" = old_testament,
+                                            "New Testament" = stop("The Leningrad Codex only includes the Old Testament."),
                                             "Both" = stop("The Leningrad Codex only includes the Old Testament.")
                           ),
                           "Greek" = switch(testament,
-                                           "New" = new_testament,
-                                           "Old" = stop("The Septuagint only includes the New Testament."),
+                                           "New Testament" = new_testament,
+                                           "Old Testament" = stop("The Septuagint only includes the New Testament."),
                                            "Both" = stop("The Septuagint only includes the New Testament.")
                           )
   )
@@ -55,13 +53,18 @@ get_fraction <- function(book,
                         language = NULL,
                         testament = NULL) {
 
+  # Validate fraction and part
+  if (fraction < 1 || part < 1 || part > fraction) {
+    stop("Invalid fraction or part. Ensure that fraction >= 1 and 1 <= part <= fraction.")
+  }
+
   # Retrieve the full text of the chapter
   full_chapter <- retrieve_chapter(book,
                                    chapter,
-                                   fraction,
-                                   part,
-                                   language,
-                                   testament)
+                                   fraction = 1,
+                                   part = 1,
+                                   language = language,
+                                   testament = testament)
 
 
   # Determine the total number of verses
@@ -76,24 +79,4 @@ get_fraction <- function(book,
 
   # Extract and return the requested section
   return(full_chapter[start_verse:end_verse])
-}
-
-get_section <- function(section,bible){
-
-  stopifnot(is.character(section))
-
-  your_section <- section
-
-  bible_sections <- unique(author_data$section)
-  if(your_section %!in% bible_sections){
-    stop("The section selected does not match any of the sections contained inthe 'author_data' dataset. Please, refer to this dataset for a complete list of sections")
-  }
-
-  books <- author_data |>
-    dplyr::group_by(section) |>
-    dplyr::filter(section == your_section) |>
-    dplyr::ungroup() |>
-    dplyr::select(books)
-
-
 }

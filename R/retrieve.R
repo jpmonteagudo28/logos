@@ -9,22 +9,24 @@ retrieve_chapter <- function(book,
                         c("English","Hebrew","Greek"),
                         several.ok = FALSE)
 
-  testament <- match.arg(testament,
-                         c("Old","New","Both"),
-                         several.ok = FALSE)
+  testament <- standardize_testament(testament)
 
-  bible_data <- get_bible_version(language,testament)
+  bible_data <- get_bible_version(language = language,testament = testament)
+
+  if (is.null(bible_data) || nrow(bible_data) == 0) {
+    stop("Error: No Bible data found for the specified language and testament.")
+  }
 
   # Verse is a numeric column
   verse <- bible_data$verse
 
   # Validate book name using fuzzy matching
-  book <- suggest_closest_book(book, unique(bible_data$book))
+  book <- validate_book(book, bible_data$book)
   if (is.null(book)) stop("Book not found. Please check your input.")
 
   # Filter for the specified book and chapter
   chapter_data <- bible_data |>
-    dplyr::filter(book == !!book, chapter == !!chapter) |>
+    dplyr::filter(book == !!book, chapter %in% !!chapter) |>
     dplyr::arrange(verse)
 
   # Get total verses in the chapter

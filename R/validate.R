@@ -1,6 +1,8 @@
 # Suggest book match based on provided book string
 suggest_closest_book <- function(book, book_list) {
 
+  book_list <- unique(book_list)
+
   # Apply agrep to each book separately
   suggestions <- sapply(book, function(x) {
     matches <- agrep(x, book_list, value = TRUE, max.distance = 0.2)
@@ -43,6 +45,13 @@ validate_book <- function(book, book_list) {
     return(book)  # Return early if book is NULL
   }
 
+  # Only works for data frames of ncol = 1. It gets messy for more than 1 column
+  if(is_nested(book) && !is.data.frame(book)){
+  stop("Unnest your list before proceeding any further")
+  } else if(is.list(book) || is.data.frame(book)){
+    books <- unlist(book)
+  }
+
   book <- standardize_name(book)
 
   # If all books exist in book_list, return them as is
@@ -66,6 +75,7 @@ validate_book <- function(book, book_list) {
   stop("The book you provided doesn't match any books in the Old or New Testament.
        Please refer to the 'author_data' dataset for a complete list.")
 }
+
 
 standardize_name <- function(book) {
   # Define a lookup table with known variations and target format
@@ -110,3 +120,18 @@ standardize_name <- function(book) {
   return(transformed)
 }
 
+
+standardize_testament <- function(testament){
+
+  testament_map <- c("Old" = "Old Testament",
+                     "old" = "Old Testament",
+                     "old testament" = "Old Testament",
+                     "New" = "New Testament",
+                     "new" = "New Testament",
+                     "new testament" = "New Testament",
+                     "both" = "Both")
+
+  transformed <- ifelse(testament %in% names(testament_map),testament_map[testament],testament)
+
+  return(transformed)
+}

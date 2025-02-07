@@ -74,4 +74,9 @@ flatten <- function(lst) {
 }
 
 #---- ---- --- --- ---- ---- --- --- ---- ----#
-is_nested <- function(lst) vapply(lst, function(x) inherits(x[1L], "list"), FALSE)
+is_nested <- function(x) {
+  if (!is.list(x)) {
+    return(FALSE)
+  }
+  is.list(x) && any(sapply(x, is.list))
+}

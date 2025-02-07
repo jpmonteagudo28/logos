@@ -10,7 +10,8 @@ select_passage <- function(book = NULL,
   # We definitely need a book
   # and language to provide
   # a valid output.
-  stopifnot(is.character(language))
+  stopifnot(is.character(language),
+            is.character(testament))
 
   language <- match.arg(language,
                         c("English","Hebrew","Greek"),
@@ -19,6 +20,12 @@ select_passage <- function(book = NULL,
   testament <- match.arg(testament,
                          c("Old","New","Both"),
                          several.ok = FALSE)
+
+  # Dealing with the by argument
+  by <- match.arg(by,
+                  c("author","section",NULL),
+                  several.ok = FALSE)
+
 
   # Manage book input, if provided
   if (!is.null(book)) {
@@ -40,12 +47,8 @@ select_passage <- function(book = NULL,
     verse <- verse
   }
 
-  # Dealing with the by argument
-  by <- match.arg(by,
-                  c("author","section",NULL),
-                  several.ok = FALSE)
 
-  if(!is.null(by) && (!is.null(book) || !is.null(chapter) || is.null(verse))){
+  if(!is.null(by) && !(is.null(book) || is.null(chapter) || is.null(verse))){
     stop("If choosing to display books by author or section, the 'book','chapter' and 'verse' arguments must be NULL")
   } else{
       # if by is an author names, grab the author
@@ -55,6 +58,8 @@ select_passage <- function(book = NULL,
       } else if(by %in% author_data$section){
         section <- by
         # if neither is true, well…, the user needs to check himself ;)
+      } else if(by %in% author_data$date){
+        date_range <- by
       } else {
         stop("The author or section you chose doesn't match the biblical authors or sections in 'author_data'. Please, check the 'author_data' dataset for a full list of authors and section.")
       }
