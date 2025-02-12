@@ -63,3 +63,19 @@
 #' }
 #' @details This dataset summarizes metadata about biblical authors, sections, and book classifications.
 "author_data"
+
+#' Verses by Book
+#'
+#' A dataset containing the number of verses for each book in the Bible.
+#'
+#' @format A data frame with 66 rows and 2 variables:
+#' \describe{
+#'   \item{book}{A character vector containing abbreviated book names (e.g., "1Chr", "1Cor", "1John", "1Kgs", "1Pet", "1Sam", "1Thess", "1Tim", etc.).}
+#'   \item{n}{An integer vector representing the number of verses in each corresponding book.}
+#' }
+#'
+#' @details
+#' This dataset provides a summary of the verse counts for each book of the Bible. It is useful for
+#' biblical studies, allowing for quick reference to the structure of the biblical texts and facilitating
+#' statistical analysis.
+"verses_by_book"

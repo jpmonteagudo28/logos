@@ -61,17 +61,6 @@ to_char <- function(symbol) {
   }
   return(deparse(expr))
 }
-#---- ---- --- --- ---- ---- --- --- ---- ----#
-squash <- function(lst) {
-  do.call(c, lapply(lst, function(x) if (is.list(x) && !is.data.frame(x)) squash(x) else list(x)))
-}
-
-#---- ---- --- --- ---- ---- --- --- ---- ----#
-flatten <- function(lst) {
-  nested <- is_nested(lst)
-  res <- c(lst[!nested], unlist(lst[nested], recursive = FALSE))
-  if (sum(nested)) Recall(res) else return(res)
-}
 
 #---- ---- --- --- ---- ---- --- --- ---- ----#
 is_nested <- function(x) {
@@ -80,3 +69,10 @@ is_nested <- function(x) {
   }
   is.list(x) && any(sapply(x, is.list))
 }
+
+#---- --- ---- --- ---- --- ---- --- ---- --- ----#
+is_empty <- function(x) {
+  (length(x) == 0)
+}
+
+

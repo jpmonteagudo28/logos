@@ -1,3 +1,21 @@
+#' Get Bible Version
+#'
+#' Retrieves the Bible data filtered by the specified language and testament.
+#'
+#' @param language A character string specifying the language of the Bible.
+#'   Must be one of \code{"English"}, \code{"Hebrew"}, or \code{"Greek"}.
+#' @param testament A character string specifying the testament. This input is standardized using
+#'   \code{standardize_testament()} and should typically be \code{"Old Testament"}, \code{"New Testament"},
+#'   or \code{"Both"}.
+#'
+#' @details
+#' This function filters the underlying Bible dataset based on the specified \code{language} and \code{testament}.
+#' For English, it divides the dataset into Old and New Testaments by using predefined book ranges from the
+#' \code{rasb_bible} dataset. For Hebrew and Greek, it refers to the \code{old_testament} and \code{new_testament}
+#' datasets respectively, and will produce an error if an unsupported combination is requested.
+#'
+#' @return A data frame containing the Bible data corresponding to the selected language and testament.
+#' @export
 get_bible_version <- function(language,testament){
 
   language <- match.arg(language,
@@ -45,7 +63,28 @@ get_bible_version <- function(language,testament){
   return(bible_version)
 }
 
-
+#' Get Fraction of a Chapter or Book
+#'
+#' Extracts a specified fraction of a chapter from a given book or a portion of a book.
+#'
+#' @param book A character string or vector specifying the book(s) from which the chapter is retrieved.
+#' @param chapter A numeric vector indicating the chapter number(s) to be processed.
+#' @param fraction A numeric value representing the total number of sections into which the chapter should be divided.
+#'   Must be an integer greater than or equal to 1.
+#' @param part A numeric value indicating which section of the divided chapter to return.
+#'   Must satisfy \code{1 <= part <= fraction}.
+#' @param language An optional character string indicating the language of the Bible.
+#'   Typically one of \code{"English"}, \code{"Hebrew"}, or \code{"Greek"}. Default is \code{NULL}.
+#' @param testament An optional character string specifying the testament.
+#'   Should be \code{"Old Testament"}, \code{"New Testament"}, or \code{"Both"}. Default is \code{NULL}.
+#'
+#' @details
+#' This function validates the \code{fraction} and \code{part} parameters, retrieves the full chapter text using
+#' \code{retrieve_chapter()}, and calculates the corresponding section of the chapter to return. The chapter is divided
+#' into equal parts based on the number of verses, and the function extracts the verses corresponding to the requested part.
+#'
+#' @return A character vector containing the verses from the specified section of the chapter.
+#' @export
 get_fraction <- function(book,
                         chapter,
                         fraction,

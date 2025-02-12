@@ -1,5 +1,22 @@
+#' Retrieve a specific chapter or portion of a chapter from the Bible
+#'
+#' This function retrieves text from a specified book and chapter, with optional filtering
+#' by verse, partitioning, and language selection.
+#'
+#' @param book A character string specifying the book of the Bible.
+#' @param chapter A numeric or character vector specifying the chapter(s) to retrieve.
+#' @param verse An optional numeric vector specifying specific verses to retrieve.
+#' @param fraction A numeric value indicating how many equal parts to divide the chapter into.
+#' @param part A numeric value specifying which part to return (must be between 1 and `fraction`).
+#' @param language A character string specifying the language of the Bible text. Options are "English", "Hebrew", or "Greek".
+#' @param testament A character string specifying whether to retrieve from the Old or New Testament.
+#'
+#' @return A character vector containing the retrieved Bible text.
+#' @export
+#'
 retrieve_chapter <- function(book,
-                             chapter,
+                             chapter = NULL,
+                             verse = NULL,
                              fraction = 1,
                              part = 1,
                              language,
@@ -17,19 +34,29 @@ retrieve_chapter <- function(book,
     stop("Error: No Bible data found for the specified language and testament.")
   }
 
-  # Verse is a numeric column
-  verse <- bible_data$verse
-
   # Validate book name using fuzzy matching
-  book <- validate_book(book, bible_data$book)
-  if (is.null(book)) stop("Book not found. Please check your input.")
+  validated_books <- validate_book(book, bible_data$book)
+  if (is.null(validated_books)) stop("Book not found. Please check your input.")
 
-  # Filter for the specified book and chapter
-  chapter_data <- bible_data |>
-    dplyr::filter(book == !!book, chapter %in% !!chapter) |>
-    dplyr::arrange(verse)
+  # Filter for the specified book(s) and, if provided, chapter(s)
+  if (!is.null(chapter)) {
+    chapter_data <- bible_data |>
+      dplyr::filter(book %in% validated_books, chapter %in% chapter)
+  } else {
+    chapter_data <- bible_data |>
+      dplyr::filter(book %in% validated_books)
+  }
 
-  # Get total verses in the chapter
+  # Apply verse filtering **before fractioning**
+  if (!is.null(verse)) {
+    chapter_data <- chapter_data |>
+      dplyr::filter(verse %in% verse)
+  }
+
+  # Sort by verse
+  chapter_data <- chapter_data |> dplyr::arrange(verse)
+
+  # Get total verses in the filtered subset
   total_verses <- nrow(chapter_data)
 
   # Validate fraction and part
@@ -43,8 +70,7 @@ retrieve_chapter <- function(book,
   end_verse <- min(part * section_size, total_verses)
 
   # Retrieve only the requested portion
-  chapter_data <- chapter_data |>
-    dplyr::slice(start_verse:end_verse)
+  chapter_data <- chapter_data |> dplyr::slice(start_verse:end_verse)
 
   return(chapter_data$text)
 }

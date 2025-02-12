@@ -28,7 +28,4 @@ outlined in 'author_data' dataset.
 \item General Epistles: Hebrews – Jude
 \item Apocalyptic: Revelation}
 }
-\examples{
-by_section("Gospels","new")
-
-}
+\keyword{internal}

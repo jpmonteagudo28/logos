@@ -7,9 +7,9 @@
 by_date(date_range, testament)
 }
 \arguments{
-\item{testament}{a character vector of length 1 specifying the testament corresponding to the provided date range}
+\item{date_range}{a character vector or length 1, written as a date range, "1445 - 1405 BC", specifying the probable writing period of the Old or New Testament books}
 
-\item{section}{a character vector or length 1, written as a date range, "1445 - 1405 BC", specifying the probable writing period of the Old or New Testament books}
+\item{testament}{a character vector of length 1 specifying the testament corresponding to the provided date range}
 }
 \value{
 a character vector of standardized book names to be passed to other functions
@@ -18,7 +18,4 @@ a character vector of standardized book names to be passed to other functions
 Collect book names from RASB Bible, Leningrad Codex, or Septuagint based on the dates
 outlined in 'author_data' dataset.
 }
-\examples{
-by_date("65 AD","new")
-by_date("1445 - 1405 BC", "old")
-}
+\keyword{internal}

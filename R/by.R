@@ -18,10 +18,8 @@
 #' @param testament a character vector of length 1 specifying the testament in which the section is found
 #'
 #' @return a character vector of standardized book names to be passed to other functions
-#'
-#' @examples
-#' by_section("Gospels","new")
-#'
+#' @export
+#' @keywords internal
 by_section <- function(section,testament){
 
   stopifnot(is.character(section),
@@ -43,6 +41,10 @@ by_section <- function(section,testament){
     dplyr::select(books)
 
   books <- lapply(books, standardize_name)
+
+  if(is_empty(books[[1]])){
+    warning("The section and testament you've chosen are not compatible. Refer to the 'by_section()' documentation for help.")
+  }
 
   return(books)
 }
@@ -92,9 +94,9 @@ by_section <- function(section,testament){
 #' @param testament a character vector of length 1 specifying the testament/time period in which the author is found
 #'
 #' @return a character vector of standardized book names to be passed to other functions
-#'
-#' @examples
-#' by_author("Matthew","new")
+#' @export
+#' @keywords internal
+
 by_author <- function(author, testament){
 
   stopifnot(is.character(author),
@@ -115,7 +117,11 @@ by_author <- function(author, testament){
     dplyr::ungroup() |>
     dplyr::select(books)
 
-  books <- lapply(books, standardize_name)
+  books <- sapply(books, standardize_name)
+
+  if(is_empty(books[[1]])){
+    warning("The author and testament you've chosen are not compatible. Refer to the 'by_author()' documentation for help.")
+  }
 
   return(books)
 }
@@ -126,47 +132,47 @@ by_author <- function(author, testament){
 #' Collect book names from RASB Bible, Leningrad Codex, or Septuagint based on the dates
 #' outlined in 'author_data' dataset.
 #'
-#' @param section a character vector or length 1, written as a date range, "1445 - 1405 BC", specifying the probable writing period of the Old or New Testament books
+#' @param date_range a character vector or length 1, written as a date range, "1445 - 1405 BC", specifying the probable writing period of the Old or New Testament books
 #' @param testament a character vector of length 1 specifying the testament corresponding to the provided date range
 #'
 #' @return a character vector of standardized book names to be passed to other functions
-#'
-#' @examples
-#' by_date("65 AD","new")
-#' by_date("1445 - 1405 BC", "old")
+#' @export
+#' @keywords internal
 by_date <- function(date_range,testament){
 
   default_date <- unique(author_data$date)
   chosen_testament <- standardize_testament(testament)
 
-  # Define regex patterns for Old and New Testament
+  # Determine if input date is BC or AD
+  is_bc <- grepl("BC", date_range, ignore.case = TRUE)
+
   old_regex <- "\\bc\\.\\s*(\\d{3,4})(?:-(\\d{3,4}))?\\s*BC|Unknown\\b"
   new_regex <- "\\b(c\\.\\s*\\d{1,2}(?:-\\d{1,2})?\\s*AD)|Unknown\\b"
 
-  # Select appropriate regex based on testament
-  regex <- if (chosen_testament == "New Testament") new_regex else old_regex
+  # Select regex based on input date type, not testament
+  regex <- if (is_bc) old_regex else new_regex
 
-  # Find matching dates
   matches <- grep(regex, default_date, value = TRUE)
 
-  # If date_range is provided, extract numeric values and filter matches
   if (!is.null(date_range)) {
     range_values <- as.numeric(unlist(regmatches(date_range, gregexpr("\\d+", date_range))))
-
     if (length(range_values) > 0) {
-      # Parse extracted date values
       start_date <- range_values[1]
       end_date <- ifelse(length(range_values) > 1, range_values[2], start_date)
 
-      # Filter matched dates within the range
       matches <- matches[sapply(matches, function(date) {
         num_values <- as.numeric(unlist(regmatches(date, gregexpr("\\d+", date))))
         if (length(num_values) > 0) {
           book_start <- num_values[1]
           book_end <- ifelse(length(num_values) > 1, num_values[2], book_start)
 
-          # Check if the book's date range overlaps with the input date range
-          return(!(book_end < start_date || book_start > end_date))
+          if (is_bc) {
+            # For BC dates, reverse the comparison
+            return(!(book_start < end_date || book_end > start_date))
+          } else {
+            # For AD dates, use normal comparison
+            return(!(book_end < start_date || book_start > end_date))
+          }
         }
         return(FALSE)
       })]
@@ -174,13 +180,12 @@ by_date <- function(date_range,testament){
   }
 
   books <- author_data |>
-    dplyr::group_by(author) |>
     dplyr::filter(date %in% matches,
                   testament == chosen_testament) |>
-    dplyr::ungroup() |>
     dplyr::select(books)
 
-  books <- lapply(books, standardize_name)
-
+  if(is_empty(books[[1]])){
+    warning("The date is not compatible with the testament our outside the correct date range. Refer to the 'by_date()' documentation for help.")
+  }
   return(books)
 }

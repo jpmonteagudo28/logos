@@ -52,6 +52,4 @@ outlined in 'author_data' dataset.
 \item Jude: Jude
 \item Unknown: Hebrews}
 }
-\examples{
-by_author("Matthew","new")
-}
+\keyword{internal}
