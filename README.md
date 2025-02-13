@@ -7,12 +7,6 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/logos)](https://CRAN.R-project.org/package=logos)
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![](https://codecov.io/gh/jpmonteagudo28/logos/branch/master/graph/badge.svg)](https://app.codecov.io/gh/jpmonteagudo28/logos)
-![Static
-Badge](https://img.shields.io/badge/biblical-research-%23035949)
-[![](https://cranlogs.r-pkg.org/badges/logos)](https://cran.r-project.org/package=logos)
 <!-- badges: end -->
 
 The goal of `logos` is to give access to the Greek New Testament (27
