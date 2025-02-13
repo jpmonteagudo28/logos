@@ -8,8 +8,8 @@ retrieve_chapter(
   book,
   chapter = NULL,
   verse = NULL,
-  fraction = 1,
-  part = 1,
+  fraction = NULL,
+  part = NULL,
   language,
   testament
 )

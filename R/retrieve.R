@@ -17,8 +17,8 @@
 retrieve_chapter <- function(book,
                              chapter = NULL,
                              verse = NULL,
-                             fraction = 1,
-                             part = 1,
+                             fraction = NULL,
+                             part = NULL,
                              language,
                              testament) {
 
@@ -39,18 +39,23 @@ retrieve_chapter <- function(book,
   if (is.null(validated_books)) stop("Book not found. Please check your input.")
 
   # Filter for the specified book(s) and, if provided, chapter(s)
+  chapter_data <- bible_data |>
+    dplyr::filter(book %in% validated_books)
+
+
   if (!is.null(chapter)) {
-    chapter_data <- bible_data |>
-      dplyr::filter(book %in% validated_books, chapter %in% chapter)
-  } else {
-    chapter_data <- bible_data |>
-      dplyr::filter(book %in% validated_books)
+    chapter_data <- chapter_data |>
+      dplyr::filter(chapter %in% !!chapter)
   }
 
-  # Apply verse filtering **before fractioning**
   if (!is.null(verse)) {
     chapter_data <- chapter_data |>
-      dplyr::filter(verse %in% verse)
+      dplyr::filter(verse %in% !!verse)
+  }
+
+  # If nothing remains, return error
+  if (nrow(chapter_data) == 0) {
+    stop("Error: No matching verses found for the given book and chapter.")
   }
 
   # Sort by verse
@@ -59,18 +64,23 @@ retrieve_chapter <- function(book,
   # Get total verses in the filtered subset
   total_verses <- nrow(chapter_data)
 
-  # Validate fraction and part
-  if (fraction < 1 || part < 1 || part > fraction) {
-    stop("Invalid fraction or part. Ensure that fraction >= 1 and 1 <= part <= fraction.")
+  if (!is.null(fraction) || !is.null(part)) {
+    if (is.null(fraction) || is.null(part)) {
+      stop("Both 'fraction' and 'part' must be provided together.")
+    }
+    if (fraction < 1 || part < 1 || part > fraction) {
+      stop("Invalid fraction or part. Ensure that fraction >= 1 and 1 <= part <= fraction.")
+    }
+
+    # Get total verses
+    total_verses <- nrow(chapter_data)
+    section_size <- ceiling(total_verses / fraction)
+    start_verse <- (part - 1) * section_size + 1
+    end_verse <- min(part * section_size, total_verses)
+
+    # Retrieve only the requested portion
+    chapter_data <- chapter_data |> dplyr::slice(start_verse:end_verse)
   }
-
-  # Determine verse range for the requested part
-  section_size <- ceiling(total_verses / fraction)
-  start_verse <- (part - 1) * section_size + 1
-  end_verse <- min(part * section_size, total_verses)
-
-  # Retrieve only the requested portion
-  chapter_data <- chapter_data |> dplyr::slice(start_verse:end_verse)
 
   return(chapter_data$text)
 }

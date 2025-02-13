@@ -1,0 +1,22 @@
+url: https://logos.jpmonteagudo.com
+
+template:
+  bootstrap: 5
+  bslib:
+    bg: "#F2F2F2"
+    fg: "#035949"
+    primary: "#242424"
+    base_font: {google: "Cormorant"}
+    heading_font: {google: "Cormorant SC"}
+    code_font: {google: "Fira Code"}
+  theme: a11y-light
+
+  navbar:
+    bg: fg
+    structure:
+      left: [intro, reference, news]
+      right: [github]
+  footer:
+    structure:
+      left: developed_by
+      right: built_with

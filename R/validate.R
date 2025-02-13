@@ -10,24 +10,23 @@
 #' @export
 #'
 suggest_closest_book <- function(book, book_list) {
-
   book_list <- unique(book_list)
 
   # Apply agrep to each book separately
   suggestions <- sapply(book, function(x) {
     matches <- agrep(x, book_list, value = TRUE, max.distance = 0.2)
 
-    # If exactly one match, return it
+    # If exactly one match, return it immediately
     if (length(matches) == 1) {
       message(paste("Did you mean:", matches, "?"))
       return(matches)
+    }
 
-      # If multiple matches, return up to 3 options
-    } else if (length(matches) > 1) {
-      matches <- utils::head(matches, 3)
+    # If multiple matches, force selection
+    while (length(matches) > 1) {
       message("Multiple similar books found for '", x, "': ", paste(matches, collapse = ", "))
 
-      # Prompt user to select (only in interactive mode)
+      # If interactive mode, prompt user
       if (interactive()) {
         selected_book <- utils::menu(matches, title = paste("Please select the correct book for:", x))
 
@@ -36,16 +35,19 @@ suggest_closest_book <- function(book, book_list) {
         }
       }
 
-      # If not interactive or no selection, return first match
+      # If not interactive or no selection, automatically choose first match
+      message("No selection made. Defaulting to:", matches[1])
       return(matches[1])
     }
 
     # No match found
+    message("No close matches found for:", x)
     return(NA_character_)
   }, USE.NAMES = FALSE)
 
   return(suggestions)
 }
+
 
 
 #' Validate book names against a reference list

@@ -9,3 +9,11 @@
 ^About\.md$
 ^inst$
 ^R/folder_size\.R$
+^raw_data$
+^_README\.md$
+^About\.md$
+^\.gitattributes$
+^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

@@ -4,6 +4,9 @@
 # logos <img src="man/figures/logo.png" align="right" height="275" alt="" />
 
 <!-- badges: start -->
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/logos)](https://CRAN.R-project.org/package=logos)
 <!-- badges: end -->
 
 The goal of `logos` is to give access to the Greek New Testament (27

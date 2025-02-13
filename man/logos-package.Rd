@@ -4,7 +4,7 @@
 \name{logos-package}
 \alias{logos}
 \alias{logos-package}
-\title{logos: Access to the Leningrad Codex version of the Old Testament,the Greek New Testament, and the Revised American Standard Bible}
+\title{logos: Access to the Leningrad Codex Version of the Old Testament,the Greek New Testament, and the Revised American Standard Bible}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
