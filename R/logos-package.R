@@ -2,7 +2,6 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom base %||%
 #' @importFrom dplyr arrange
 #' @importFrom dplyr filter
 #' @importFrom dplyr group_by
