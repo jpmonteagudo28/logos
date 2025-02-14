@@ -18,3 +18,4 @@ A character vector of suggested book names or NA if no close match is found.
 This function suggests the closest matching book name based on the input string.
 It uses approximate string matching to find similar book names from the provided list.
 }
+\keyword{internal}

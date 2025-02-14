@@ -26,3 +26,4 @@ For English, it divides the dataset into Old and New Testaments by using predefi
 \code{rasb_bible} dataset. For Hebrew and Greek, it refers to the \code{old_testament} and \code{new_testament}
 datasets respectively, and will produce an error if an unsupported combination is requested.
 }
+\keyword{internal}

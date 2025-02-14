@@ -15,3 +15,4 @@ A character vector of standardized testament names.
 \description{
 This function converts testament to their standardized abbreviations using a predefined lookup table.
 }
+\keyword{internal}

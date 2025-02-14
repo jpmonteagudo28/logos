@@ -16,6 +16,8 @@
 #'
 #' @return A data frame containing the Bible data corresponding to the selected language and testament.
 #' @export
+#' @keywords internal
+
 get_bible_version <- function(language,testament){
 
   language <- match.arg(language,
@@ -85,6 +87,8 @@ get_bible_version <- function(language,testament){
 #'
 #' @return A character vector containing the verses from the specified section of the chapter.
 #' @export
+#' @keywords internal
+#'
 get_fraction <- function(book,
                         chapter,
                         fraction,

@@ -17,3 +17,4 @@ A character vector of validated or suggested book names.
 \description{
 This function checks if the provided book names exist in a given list and suggests the closest match if not.
 }
+\keyword{internal}

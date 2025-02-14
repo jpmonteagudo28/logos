@@ -15,3 +15,4 @@ A character vector of standardized book names.
 \description{
 This function converts book names to their standardized abbreviations using a predefined lookup table.
 }
+\keyword{internal}

@@ -8,6 +8,7 @@
 #'
 #' @return A character vector of suggested book names or NA if no close match is found.
 #' @export
+#' @keywords internal
 #'
 suggest_closest_book <- function(book, book_list) {
   book_list <- unique(book_list)
@@ -59,6 +60,8 @@ suggest_closest_book <- function(book, book_list) {
 #'
 #' @return A character vector of validated or suggested book names.
 #' @export
+#' @keywords internal
+
 validate_book <- function(book, book_list) {
 
   if (is.null(book)) {
@@ -104,6 +107,8 @@ validate_book <- function(book, book_list) {
 #'
 #' @return A character vector of standardized book names.
 #' @export
+#' @keywords internal
+
 standardize_name <- function(book) {
   # Define a lookup table with known variations and target format
   book_map <- c(
@@ -192,6 +197,7 @@ standardize_name <- function(book) {
 #'
 #' @return A character vector of standardized testament names.
 #' @export
+#' @keywords internal
 
 standardize_testament <- function(testament){
 

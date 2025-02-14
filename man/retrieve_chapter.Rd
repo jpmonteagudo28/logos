@@ -36,3 +36,7 @@ A character vector containing the retrieved Bible text.
 This function retrieves text from a specified book and chapter, with optional filtering
 by verse, partitioning, and language selection.
 }
+\examples{
+retrieve_chapter("Jud",chapter = 1, verse = 1, language = "English", testament = "new")
+
+}

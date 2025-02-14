@@ -34,3 +34,4 @@ This function validates the \code{fraction} and \code{part} parameters, retrieve
 \code{retrieve_chapter()}, and calculates the corresponding section of the chapter to return. The chapter is divided
 into equal parts based on the number of verses, and the function extracts the verses corresponding to the requested part.
 }
+\keyword{internal}

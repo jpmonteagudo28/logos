@@ -13,6 +13,8 @@
 #'
 #' @return A character vector containing the retrieved Bible text.
 #' @export
+#' @examples
+#' retrieve_chapter("Jud",chapter = 1, verse = 1, language = "English", testament = "new")
 #'
 retrieve_chapter <- function(book,
                              chapter = NULL,
