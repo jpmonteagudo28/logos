@@ -37,11 +37,21 @@ or download the package from CRAN like so:
 install.packages("logos")
 ```
 
-## Example
+## Project status
 
-This is a basic example which shows you how to solve a common problem:
+Actively developed, though the pace has slowed now that I’m busier with
+other packages and my school work. I have no plans to substantially
+enlarge or extend it before really testing it.
 
-``` r
-# library(logos)
-## basic example code
-```
+## Contributions
+
+If you would like to contribute to this package, I’d love your help!
+Please read the
+[guidelines](https://logos.jpmonteagudo.com/CONTRIBUTING.html) for
+submitting a pull request.
+
+## Code of Conduct
+
+Please note that the logos project is released with a [Contributor Code
+of Conduct](https://logos.jpmonteagudo.com/CODE_OF_CONDUCT.html). By
+contributing to this project, you agree to abide by its terms.
