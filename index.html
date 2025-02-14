@@ -75,6 +75,37 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"logos"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="how-to">How to<a class="anchor" aria-label="anchor" href="#how-to"></a>
+</h2>
+<p>The main function in this package is the <code><a href="reference/select_passage.html">select_passage()</a></code> function as it allows you to retrieve entire sections, books, chapters or verses of the English Bible (RASB), Greek New Testament, and Hebrew Old Testament. The remaining functions are helpers that facilitate retrieval and manipulation of biblical text.</p>
+<p>Besides <code><a href="reference/select_passage.html">select_passage()</a></code>, you have access to five datasets. The <em>Revised Standard American Bible</em>, ‘rasb_bible’, the <em>Society of Biblical Literature Greek New Testament</em>,‘new_testament’, and the <em>Leningrad Codex</em> containing the Old testament,‘old_testament’. Two additional datasets are ‘author_data’ which contains a breakdown of the authors, dates, sections and books of the Old and New Testament, and ‘verses_by_book’, which provides a count of the total number of verses for each book of the bible.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(logos)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># Let's grab a passage from the Gospel of John, chapter 1, verses 1 - 6</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">select_passage</span>(<span class="st">"Jhn"</span>,<span class="at">chapter =</span> <span class="dv">1</span>, <span class="at">verse =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">language =</span> <span class="st">"English"</span>, <span class="at">testament =</span> <span class="st">"new)</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="st"># You can do so it a different language by changing the language argument</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="st">select_passage("</span>Jhn<span class="st">",chapter = 1, verse = 1:6, language = "</span>Greek<span class="st">", testament = "</span>new)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co"># Notice that if you provide incompatible language and testament combinations for the Greek and Hebrew text, the function will throw an error and remind you to use the right combinations. </span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="fu">select_passage</span>(<span class="st">"Jhn"</span>,<span class="at">chapter =</span> <span class="dv">1</span>, <span class="at">verse =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">language =</span> <span class="st">"Hebrew"</span>, <span class="at">testament =</span> <span class="st">"new)</span></span></code></pre></div>
+<p>A secondary function is <code><a href="reference/peek.html">peek()</a></code>, a base R replacement for dplyr’s <code>glimpse()</code>. This function can be used to quickly get a sense of the data you’ll be working with.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/peek.html">peek</a></span><span class="op">(</span><span class="va">old_testament</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/peek.html">peek</a></span><span class="op">(</span><span class="va">verses_by_book</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="some-real-life-examples">Some real-life examples<a class="anchor" aria-label="anchor" href="#some-real-life-examples"></a>
+</h2>
+<p>Statistics have been applied to the field of biblical research for some years now, and the creation of the <a href="https://github.com/computationalstylistics/stylo" class="external-link">stylo</a> and <a href="https://github.com/quanteda/quanteda" class="external-link">quanteda</a> package have made it much easier to perform qualitative quantitative analysis on the biblical data.</p>
+<p>I leave a few interesting articles that show the intermingling of stats and scripture.</p>
+<ul>
+<li><p><a href="https://www.cambridge.org/core/journals/new-testament-studies/article/name-recall-in-the-synoptic-gospels/9507AEED21DACD1E1AC096B5321699C5" class="external-link">Name Recall in the Synoptic Gospels</a></p></li>
+<li><p><a href="https://research.repository.duke.edu/concern/datasets/05741s76w?locale=en" class="external-link">Data from: Critical biblical studies via word frequency analysis: Unveiling text authorship</a></p></li>
+</ul>
+</div>
+<div class="section level2">
 <h2 id="project-status">Project status<a class="anchor" aria-label="anchor" href="#project-status"></a>
 </h2>
 <p>Actively developed, though the pace has slowed now that I’m busier with other packages and my school work. I have no plans to substantially enlarge or extend it before really testing it.</p>
