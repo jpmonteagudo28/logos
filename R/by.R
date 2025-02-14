@@ -185,7 +185,7 @@ by_date <- function(date_range,testament){
     dplyr::select(books)
 
   if(is_empty(books[[1]])){
-    warning("The date is not compatible with the testament our outside the correct date range. Refer to the 'by_date()' documentation for help.")
+    warning("The date is not compatible with the testament or is outside the correct date range. Refer to the 'by_date()' documentation for help.")
   }
   return(books)
 }

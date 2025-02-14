@@ -55,8 +55,8 @@ get_bible_version <- function(language,testament){
                           ),
                           "Greek" = switch(testament,
                                            "New Testament" = new_testament,
-                                           "Old Testament" = stop("The Septuagint only includes the New Testament."),
-                                           "Both" = stop("The Septuagint only includes the New Testament.")
+                                           "Old Testament" = stop("The Greek New Testament only includes the New Testament."),
+                                           "Both" = stop("The Greek New Testament only includes the New Testament.")
                           )
   )
 
