@@ -1,5 +1,10 @@
 `%!in%` <- Negate(`%in%`)
 
+
+# Adding this function to remove r-cmd-check error in ubuntu-latest oldrel
+`%||%` <- function (x, y) if (is.null(x)) y else x
+
+
 replace_char <- function(.input_string,
                          old_char,
                          new_char,
