@@ -1,6 +1,6 @@
 Package: logos
-Title: Access to the Leningrad Codex Version of the Old Testament,the Greek New Testament, and the Revised American Standard Bible
-Version: 0.0.1
+Title: Access to the Hebrew, Greek, and English Version of the Bible
+Version: 0.1.0
 Authors@R: 
     person("JP", "Monteagudo", 
     email = "jpmonteagudo2014@gmail.com", 
